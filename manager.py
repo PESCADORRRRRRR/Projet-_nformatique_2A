@@ -10,6 +10,7 @@ load_dotenv()
 client_id = os.getenv("SPOTIFY_CLIENT_ID")
 client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
+
 class Manager:
     """
     Classe pour gérer les requêtes à l'API Spotify et rechercher des informations audio.
@@ -37,11 +38,12 @@ class Manager:
         # Obtenir le jeton d'accès à partir de l'API Spotify
         auth_url = "https://accounts.spotify.com/api/token"
         auth_headers = {
-            "Authorization": "Basic " + base64.b64encode((client_id + ":" + client_secret).encode("utf-8")).decode("utf-8")
+            "Authorization": "Basic "
+            + base64.b64encode(
+                (client_id + ":" + client_secret).encode("utf-8")
+            ).decode("utf-8")
         }
-        auth_data = {
-            "grant_type": "client_credentials"
-        }
+        auth_data = {"grant_type": "client_credentials"}
         auth_response = requests.post(auth_url, headers=auth_headers, data=auth_data)
         auth_data = auth_response.json()
         access_token = auth_data["access_token"]
@@ -51,21 +53,23 @@ class Manager:
         params = {
             "q": f"artist:{artist_name} track:{song_title}",
             "type": "track",
-            "limit": 1
+            "limit": 1,
         }
-        headers = {
-            "Authorization": "Bearer " + access_token
-        }
+        headers = {"Authorization": "Bearer " + access_token}
         response = requests.get(url, params=params, headers=headers)
         data = response.json()
 
         # Vérifier si une piste a été trouvée
-        if "tracks" in data and "items" in data["tracks"] and len(data["tracks"]["items"]) > 0:
+        if (
+            "tracks" in data
+            and "items" in data["tracks"]
+            and len(data["tracks"]["items"]) > 0
+        ):
             track = data["tracks"]["items"][0]
             audio_info = {
                 "titre": track["name"],
                 "lien_spotify": track["external_urls"]["spotify"],
-                "extrait_audio": track["preview_url"]
+                "extrait_audio": track["preview_url"],
             }
             return audio_info
         else:

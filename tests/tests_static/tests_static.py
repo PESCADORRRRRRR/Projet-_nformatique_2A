@@ -3,7 +3,7 @@ import os
 import subprocess
 
 # Définissez une liste des fichiers Python à tester
-fichiers_python = ["scraping.py", "manager.py", "single.py", "qr_code.py"]
+fichiers_python = ["scraping.py", "manager.py", "single.py", "QR_code.py"]
 
 # Fonction pour exécuter Pylint sur chaque fichier
 def executer_pylint(fichier):

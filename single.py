@@ -1,5 +1,6 @@
 from manager import Manager
 
+
 class Single:
     """
     Représente un single musical avec un titre, un artiste et une date de sortie.
@@ -25,7 +26,7 @@ class Single:
         # Lecture de l'extrait audio du single
         single.jouer_extrait_audio()
     """
-    
+
     def __init__(self, titre, artiste, date):
         """
         Initialise une instance de la classe Single avec un titre, un artiste et une date.
@@ -81,11 +82,12 @@ class Single:
             "artiste": self.artiste,
             "date": self.date,
             "lien_spotify": audio_info.get("lien_spotify") if audio_info else None,
-            "extrait_audio": audio_info.get("extrait_audio") if audio_info else None
+            "extrait_audio": audio_info.get("extrait_audio") if audio_info else None,
         }
         liste_info.append(info_single)
-        
+
         return liste_info
+
 
 # Créez une instance de la classe Single
 single = Single("Titre du single", "Artiste du single", "Date du single")

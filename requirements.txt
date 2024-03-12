@@ -1,0 +1,9 @@
+# Bibliothèques externes
+beautifulsoup4==4.10.0
+qrcode==1.15.0
+requests==2.27.1
+requests
+qrcode
+
+# Modules locaux
+spotify

@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "mon_projet"
+version = "0.1.0"
+description = "Mon projet Python"
+
+[dependencies]
+python = "^3.8"
+#beautifulsoup4==4.10.0
+qrcode==1.15.0
+requests==2.27.1
+
+[dev-dependencies]
+# Local module
+#spotify = { path = "." }  # Replace with the actual path if needed

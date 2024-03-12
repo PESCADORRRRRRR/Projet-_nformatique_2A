@@ -2,11 +2,7 @@
 
 ## Description
 
-Brève description de votre projet.
 
-## Fonctionnalités
-
-Liste des fonctionnalités principales de votre projet.
 
 ## Installation
 
@@ -20,8 +16,6 @@ Deux options d'installation sont disponibles :
      - Exécutez la commande suivante : `docker build -t my-app ..`.
    - Exécuter le conteneur Docker :
      - Exécutez la commande suivante : `docker run -it my-app`.
-
-
 
 2. **Installation manuelle :**
 
@@ -52,7 +46,6 @@ pylint manager.py
 pylint single.py
 pylint qr_code.py
 
-
 ## Dépendances
 
 Ce projet utilise les dépendances suivantes :
@@ -62,61 +55,51 @@ Ce projet utilise les dépendances suivantes :
 - requests==2.27.1
 - spotify (module local)
 
+## Test
 
-## Test statique 
+Pour exécuter les tests de ce projet, nous utilisons `tox` pour automatiser le processus. Assurez-vous d'avoir `tox` installé sur votre système.
 
-Tests statiques
-Pour exécuter les tests statiques et vérifier la qualité du code, suivez les étapes suivantes :
+Pour exécuter les tests, suivez les étapes suivantes :
 
-Assurez-vous d'avoir installé les dépendances nécessaires en suivant les instructions de la section "Installation" du README.
+1. Installez les dépendances nécessaires :
+pip install pytest coverage
 
-Ouvrez un terminal et accédez au répertoire racine du projet.
+2. À la racine du projet, exécutez `tox` avec la commande appropriée pour l'environnement Python souhaité :
+- Pour exécuter les tests unitaires et statiques :
+  ```
+  tox -e py38
+  ```
 
-Exécutez la commande suivante pour exécuter les tests statiques :
+- Pour exécuter les tests d'isolation :
+  ```
+  tox -e py39
+  ```
 
-Copy
-python -m pytest tests_static/
-Cette commande exécutera tous les tests statiques présents dans le dossier tests_static/ et affichera les résultats.
+- Pour exécuter les tests fonctionnels :
+  ```
+  tox -e py38-functional  # Pour Python 3.8
+  tox -e py39-functional  # Pour Python 3.9
+  ```
 
-Assurez-vous que tous les tests statiques passent avec succès avant de continuer à travailler sur le projet. Si des erreurs ou des avertissements sont détectés, veuillez les corriger conformément aux normes de qualité du projet.
+Cela exécutera les tests correspondants à partir des dossiers de tests spécifiés dans le fichier `tox.ini`. Assurez-vous de vérifier les résultats des tests et de résoudre tout problème avant de soumettre des contributions.
 
-
-
-
-## Analyse dynamique
-
-### Test unitaire  
-
-Ce projet est livré avec une suite complète de tests unitaires pour vérifier le bon fonctionnement de chaque fonction et module. Les tests unitaires sont écrits en utilisant le framework de tests `unittest` de Python.
-
-Pour exécuter les tests unitaires, vous pouvez utiliser la commande suivante :
-python -m unittest discover tests
-
-
-Les tests unitaires utilisent également des techniques de mocking pour isoler les fonctionnalités spécifiques à tester. Le mocking permet de simuler le comportement de certaines parties de votre code afin de se concentrer uniquement sur la logique que vous souhaitez tester.
-
-Nous utilisons la bibliothèque `unittest.mock` de Python pour effectuer les tests de mocking. Cela nous permet de créer des objets simulés, de définir des comportements spécifiques pour ces objets et de vérifier que les interactions attendues se produisent.
-
-Assurez-vous de lire la documentation des tests unitaires et du mocking pour comprendre comment écrire et exécuter ces tests. Vous pouvez trouver des exemples dans les fichiers de tests du projet.
-
-Il est recommandé d'exécuter les tests unitaires régulièrement, y compris les tests de mocking, pour vous assurer que votre code fonctionne correctement et qu'il répond aux exigences spécifiées.
-
+N'hésitez pas à consulter le fichier `tox.ini` pour plus de détails sur la configuration des tests.
 
 ## Utilisation
 
-Instructions d'utilisation de votre projet.
+
 
 ## Auteurs
 
-Liste des auteurs du projet.
+Goua Beedi Henri
 
 ## Licence
 
-Licence du projet.
+
 
 ## Contact
 
-Informations de contact pour les auteurs du projet.
+
 
 ## Conclusion
 

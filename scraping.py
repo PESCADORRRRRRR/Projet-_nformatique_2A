@@ -232,15 +232,16 @@ class WikipediaScraper:
                 if extrait_audio is not None:
                     lien=extrait_audio
                 
-                qr.add_data(lien)
-                qr.make(fit=True)
+                if lien is not None:
+                    qr.add_data(lien)
+                    qr.make(fit=True)
 
-                    # Enregistrez l'image du QR code dans le dossier spécifié avec un nom de fichier unique
-                nom_fichier = f"qr_code_{titre}.png"
-                chemin_fichier = os.path.join(chemin_sous_dossier, nom_fichier)
+                        # Enregistrez l'image du QR code dans le dossier spécifié avec un nom de fichier unique
+                    nom_fichier = f"qr_code_{titre}.png"
+                    chemin_fichier = os.path.join(chemin_sous_dossier, nom_fichier)
 
-                image = qr.make_image(fill_color="black", back_color="white")
-                image.save(chemin_fichier)   
+                    image = qr.make_image(fill_color="black", back_color="white")
+                    image.save(chemin_fichier)   
                 
 
                 
@@ -248,6 +249,10 @@ class WikipediaScraper:
             except Exception as e:
                 print(f"Error generating QR code for {titre} by {artiste}: {str(e)}")
     
+    
+    
+                    
+
     
     
                     

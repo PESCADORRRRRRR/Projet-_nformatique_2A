@@ -1,20 +1,26 @@
+
+import os
 import requests
 import base64
 import json
 
 from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-client_id = os.getenv("SPOTIFY_CLIENT_ID")
-client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-
 
 class Manager:
     """
     Classe pour gérer les requêtes à l'API Spotify et rechercher des informations audio.
     """
+
+    def __init__(self, client_id, client_secret):
+        """
+        Initialise le gestionnaire avec les informations d'identification Spotify.
+
+        Args:
+            client_id (str): ID client Spotify.
+            client_secret (str): Secret client Spotify.
+        """
+        self.client_id = client_id
+        self.client_secret = client_secret
 
     def rechercher_audio_artiste_titre(self, artist_name, song_title):
         """
@@ -40,7 +46,7 @@ class Manager:
         auth_headers = {
             "Authorization": "Basic "
             + base64.b64encode(
-                (client_id + ":" + client_secret).encode("utf-8")
+                (self.client_id + ":" + self.client_secret).encode("utf-8")
             ).decode("utf-8")
         }
         auth_data = {"grant_type": "client_credentials"}
@@ -74,3 +80,24 @@ class Manager:
             return audio_info
         else:
             return None
+
+
+# Chargement des variables d'environnement
+load_dotenv()
+
+# Création du gestionnaire avec les informations d'identification
+client_id = os.getenv("SPOTIFY_CLIENT_ID")
+client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
+manager = Manager(client_id, client_secret)
+
+# Exemple d'utilisation
+artist_name = "Tam sir"
+song_title = "Coup du marteau"
+audio_info = manager.rechercher_audio_artiste_titre(artist_name, song_title)
+
+if audio_info:
+    print(f"Titre: {audio_info['titre']}")
+    print(f"Lien Spotify: {audio_info['lien_spotify']}")
+    print(f"Extrait audio: {audio_info['extrait_audio']}")
+else:
+    print(f"Aucune piste trouvée pour l'artiste {artist_name} et le titre {song_title}")

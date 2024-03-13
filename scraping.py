@@ -194,12 +194,14 @@ class WikipediaScraper:
 
         return singles
 
-    def generate_qr_codes(self):
+    def generate_qr_codes(self,nom_dossier_sortie_qr_code):
         # Spécifiez le nom du dossier principal
-        nom_dossier = "QRCODE"
+        nom_dossier = "dossiers_de_sorties"
 
         # Spécifiez le nom du sous-dossier
-        nom_s_dossier = "image_qr"
+        nom_s_dossier = nom_dossier_sortie_qr_code
+        
+        
 
         # Obtenez le chemin absolu du dossier principal en utilisant le chemin courant du script
         chemin_dossier_principal = os.path.abspath(nom_dossier)
@@ -268,7 +270,7 @@ scraper = WikipediaScraper(url)
 # Extraction des détails des singles
 scraper.scrape()
 
-scraper.rechercher_extraits_audio()
+#scraper.rechercher_extraits_audio()
 
 
 # Test de la méthode get_singles_info

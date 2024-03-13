@@ -11,12 +11,16 @@ import qrcode
 
 class WikipediaScraper:
     """
-    Constructeur de la classe.
-
-    :param url: L'URL de la page à scraper.
+    Classe utilisée pour extraire et manipuler les données des singles numéro un en France à partir de Wikipedia.
     """
 
     def __init__(self, url):
+        """
+        Initialise une instance de la classe WikipediaScraper.
+
+        :param url: L'URL de la page Wikipedia contenant les informations sur les singles numéro un en France.
+        """
+
         self.url = url
         self.singles = []
         self.db_conn = sqlite3.connect("base_donnee.db")
@@ -24,62 +28,75 @@ class WikipediaScraper:
 
     def scrape(self):
         """
-        Méthode pour effectuer le scraping des informations sur les singles.
+        Récupère les informations des singles numéro un en France à partir de la page Wikipedia spécifiée dans l'URL.
         """
 
-        # Envoi d'une requête GET à l'URL et récupération du contenu HTML de la page
-        response = requests.get(self.url)
-        html_content = response.content
+        try:
+            # Envoi d'une requête GET à l'URL et récupération du contenu HTML de la page
+            response = requests.get(self.url)
+            html_content = response.content
 
-        # Utilisation de BeautifulSoup pour analyser le contenu HTML
-        soup = BeautifulSoup(html_content, "html.parser")
+            # Utilisation de BeautifulSoup pour analyser le contenu HTML
+            soup = BeautifulSoup(html_content, "html.parser")
 
-        # Recherche de toutes les tables contenant les informations sur les singles numéro un en France
-        tables = soup.find_all("table", class_="wikitable")
+            # Recherche de toutes les tables contenant les informations sur les singles numéro un en France
+            tables = soup.find_all("table", class_="wikitable")
 
-        # Parcours de chaque table
-        for table in tables:
-            # Extraction des lignes de la table
-            rows = table.find_all("tr")[1:]  # Ignorer la première ligne (en-tête)
+            # Parcours de chaque table
+            for table in tables:
+                # Extraction des lignes de la table
+                rows = table.find_all("tr")[1:]  # Ignorer la première ligne (en-tête)
 
-            # Parcours de chaque ligne de la table
-            for row in rows:
-                # Extraction des cellules de la ligne
-                cells = row.find_all("td")
+                # Parcours de chaque ligne de la table
+                for row in rows:
+                    # Extraction des cellules de la ligne
+                    cells = row.find_all("td")
 
-                # Vérification si la ligne contient suffisamment de cellules
-                if len(cells) >= 4:
-                    # Extraction des détails du single : titre, artiste et date
-                    date = cells[1].text.strip()
-                    artiste = cells[2].text.strip()
-                    titre = cells[3].text.strip()
+                    # Vérification si la ligne contient suffisamment de cellules
+                    if len(cells) >= 4:
+                        # Extraction des détails du single : titre, artiste et date
+                        date = cells[1].text.strip()
+                        artiste = cells[2].text.strip()
+                        titre = cells[3].text.strip()
 
-                    # Stockage des détails du single dans un dictionnaire
-                    single = {"titre": titre, "artiste": artiste, "date": date}
+                        # Stockage des détails du single dans un dictionnaire
+                        single = {"titre": titre, "artiste": artiste, "date": date}
 
-                    # Ajout du dictionnaire à la liste des singles
-                    self.singles.append(single)
+                        # Ajout du dictionnaire à la liste des singles
+                        self.singles.append(single)
+
+        except requests.exceptions.RequestException as e:
+            print("Erreur lors de la requête HTTP :", e)
+        except Exception as e:
+            print("Une erreur inattendue s'est produite :", e)
 
     def afficher_artistes_titres(self):
         """
-        Méthode pour afficher les artistes et titres des singles.
+        Affiche les artistes et les titres des singles.
         """
 
         if self.singles:
             for single in self.singles:
+                try:
 
-                single_instance = Single(
-                    single["titre"], single["artiste"], single["date"]
-                )
-                single_instance.afficher_informations()
-                print("-------------------")
+                    single_instance = Single(
+                        single["titre"], single["artiste"], single["date"]
+                    )
+                    single_instance.afficher_informations()
+                    print("-------------------")
+                except Exception as e:
+                    print(
+                        "Une erreur s'est produite lors de l'affichage des informations :",
+                        e,
+                    )
         else:
             print("Aucun single trouvé.")
 
     def rechercher_extraits_audio(self):
         """
-        Méthode pour rechercher les extraits audio des singles.
+        Recherche et joue les extraits audio des singles.
         """
+
         if self.singles:
             for single in self.singles:
                 single_instance = Single(
@@ -93,51 +110,69 @@ class WikipediaScraper:
 
     def rechercher_singles(self):
         """
-        Méthode pour rechercher des singles spécifiques.
+        Recherche les singles en fonction du critère spécifié par l'utilisateur.
         """
-        # Demander à l'utilisateur de saisir le critère de recherche et la valeur de recherche
-        critere = input("Entrez le critère de recherche (titre, artiste ou date) : ")
-        valeur_recherche = input(
-            "Entrez la valeur de recherche : "
-        )  # si tu choisi artiste comme critère , tu mettra le nom de l'artiste en valeur_recherche
+        try:
+            # Demander à l'utilisateur de saisir le critère de recherche et la valeur de recherche
+            critere = input(
+                "Entrez le critère de recherche (titre, artiste ou date) : "
+            )
+            valeur_recherche = input("Entrez la valeur de recherche : ")
 
-        # Créer une liste pour stocker les singles correspondants à la recherche
-        singles_recherches = []
+            # Créer une liste pour stocker les singles correspondants à la recherche
+            singles_recherches = []
 
-        # Parcourir la liste des singles extraits
-        for single in self.singles:
-            # Vérifier si le critère de recherche est "titre" et si la valeur de recherche est présente dans le titre du single
-            if (
-                critere.lower() == "titre"
-                and valeur_recherche.lower() in single["titre"].lower()
-            ):
-                singles_recherches.append(single)
-            # Vérifier si le critère de recherche est "artiste" et si la valeur de recherche est présente dans le nom de l'artiste du single
-            elif (
-                critere.lower() == "artiste"
-                and valeur_recherche.lower() in single["artiste"].lower()
-            ):
-                singles_recherches.append(single)
-            # Vérifier si le critère de recherche est "date" et si la valeur de recherche est présente dans la date du single
-            elif (
-                critere.lower() == "date"
-                and valeur_recherche.lower() in single["date"].lower()
-            ):
-                singles_recherches.append(single)
+            # Parcourir la liste des singles extraits
+            for single in self.singles:
+                try:
+                    # Vérifier si le critère de recherche est "titre" et si la valeur de recherche est présente dans le titre du single
+                    if (
+                        critere.lower() == "titre"
+                        and valeur_recherche.lower() in single["titre"].lower()
+                    ):
+                        singles_recherches.append(single)
+                    # Vérifier si le critère de recherche est "artiste" et si la valeur de recherche est présente dans le nom de l'artiste du single
+                    elif (
+                        critere.lower() == "artiste"
+                        and valeur_recherche.lower() in single["artiste"].lower()
+                    ):
+                        singles_recherches.append(single)
+                    # Vérifier si le critère de recherche est "date" et si la valeur de recherche est présente dans la date du single
+                    elif (
+                        critere.lower() == "date"
+                        and valeur_recherche.lower() in single["date"].lower()
+                    ):
+                        singles_recherches.append(single)
+                except Exception as e:
+                    print("Erreur lors de la recherche des singles :", e)
 
-        # Vérifier si des singles correspondants ont été trouvés
-        if singles_recherches:
-            # Parcourir les singles correspondants et afficher leurs informations
-            for single in singles_recherches:
-                single_instance = Single(
-                    single["titre"], single["artiste"], single["date"]
-                )
-                single_instance.afficher_informations()
-                print("-------------------")
-        else:
-            print("Aucun single trouvé pour la valeur de recherche spécifiée.")
+            # Vérifier si des singles correspondants ont été trouvés
+            if singles_recherches:
+                # Parcourir les singles correspondants et afficher leurs informations
+                for single in singles_recherches:
+                    try:
+                        single_instance = Single(
+                            single["titre"], single["artiste"], single["date"]
+                        )
+                        single_instance.afficher_informations()
+                        print("-------------------")
+                    except Exception as e:
+                        print(
+                            "Erreur lors de l'affichage des informations du single :", e
+                        )
+            else:
+                print("Aucun single trouvé pour la valeur de recherche spécifiée.")
+        except Exception as e:
+            print("Erreur lors de la recherche des singles :", e)
 
     def inserer_dans_liste(self):
+        """
+        Insère les données des singles dans une liste et renvoie la liste des singles.
+
+        :return: La liste des singles avec leurs informations.
+
+        """
+
         singles = []
 
         # Parcourir la liste des singles extraits
@@ -194,14 +229,19 @@ class WikipediaScraper:
 
         return singles
 
-    def generate_qr_codes(self,nom_dossier_sortie_qr_code):
+    def generate_qr_codes(self, nom_dossier_sortie_qr_code):
+        """
+        Génère des codes QR pour les données des singles et les enregistre dans un dossier spécifié.
+
+        :param nom_dossier_sortie_qr_code: Le nom du dossier de sortie pour les codes QR.
+
+        """
+
         # Spécifiez le nom du dossier principal
         nom_dossier = "dossiers_de_sorties"
 
         # Spécifiez le nom du sous-dossier
         nom_s_dossier = nom_dossier_sortie_qr_code
-        
-        
 
         # Obtenez le chemin absolu du dossier principal en utilisant le chemin courant du script
         chemin_dossier_principal = os.path.abspath(nom_dossier)
@@ -270,7 +310,7 @@ scraper = WikipediaScraper(url)
 # Extraction des détails des singles
 scraper.scrape()
 
-#scraper.rechercher_extraits_audio()
+# scraper.rechercher_extraits_audio()
 
 
 # Test de la méthode get_singles_info

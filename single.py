@@ -1,6 +1,4 @@
 from manager import Manager
-
-# Importation des variables d'environnement
 import os
 
 
@@ -12,28 +10,22 @@ class Single:
         titre (str): Le titre du single.
         artiste (str): L'artiste du single.
         date (str): La date de sortie du single au format "YYYY-MM-DD".
-        manager (Manager): Une instance de la classe Manager pour effectuer des opérations de gestion de la musique.
-        lien_spotify (str): Lien Spotify du single (optionnel).
-        extrait_audio (str): URL de l'extrait audio du single (optionnel).
+        lien_spotify (str): Le lien vers le single sur Spotify.
+        extrait_audio (str): L'extrait audio du single.
+        manager (Manager): Le gestionnaire de recherche audio.
 
     Methods:
-        rechercher_audio_artiste_titre(): Recherche et retourne les informations audio du single (lien Spotify et extrait audio).
-        afficher_informations(): Affiche les informations du single (titre, artiste, date, lien Spotify, extrait audio).
-        jouer_extrait_audio(): Joue l'extrait audio du single s'il est trouvé, sinon affiche un message d'avertissement.
-        stocker_info(liste_info): Stocke les informations du single dans une liste.
+        __init__(self, titre, artiste, date): Initialise une instance de la classe Single.
+        rechercher_audio_artiste_titre(self): Recherche et retourne les informations audio du single.
+        afficher_informations(self): Affiche les informations du single.
+        jouer_extrait_audio(self): Joue l'extrait audio du single.
+        stocker_info(self, liste_info): Stocke les informations du single dans une liste.
 
     Usage:
-        # Création d'une instance de la classe Single
-        single = Single("Titre du single", "Artiste du single", "Date du single")
-
-        # Affichage des informations du single
+        single = Single("Coup du marteau", "Tam sir", "Date du single")
+        single.rechercher_audio_artiste_titre()
         single.afficher_informations()
-
-        # Lecture de l'extrait audio du single
         single.jouer_extrait_audio()
-
-        # Stockage des informations du single dans une liste
-        liste_info = []
         single.stocker_info(liste_info)
     """
 
@@ -49,44 +41,58 @@ class Single:
         self.titre = titre
         self.artiste = artiste
         self.date = date
-        
+
         client_id = os.getenv("SPOTIFY_CLIENT_ID")
         client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-        
+
         self.manager = Manager(client_id, client_secret)
-        
+
         self.lien_spotify = None
         self.extrait_audio = None
 
     def rechercher_audio_artiste_titre(self):
         """
-        Recherche et retourne les informations audio du single (lien Spotify et extrait audio).
+        Recherche les informations audio du single (lien Spotify et extrait audio).
 
         Returns:
-            dict: Un dictionnaire contenant les informations audio du single (lien Spotify et extrait audio).
+            audio_info (dict): Un dictionnaire contenant les informations audio du single.
         """
-        audio_info = self.manager.rechercher_audio_artiste_titre(self.artiste, self.titre)
-        if audio_info:
-            self.lien_spotify = audio_info["lien_spotify"]
-            self.extrait_audio = audio_info["extrait_audio"]
-        return audio_info
+        try:
+            audio_info = self.manager.rechercher_audio_artiste_titre(
+                self.artiste, self.titre
+            )
+            if audio_info:
+                self.lien_spotify = audio_info["lien_spotify"]
+                self.extrait_audio = audio_info["extrait_audio"]
+            return audio_info
+        except Exception as e:
+            print(
+                "Une erreur s'est produite lors de la recherche des informations audio :",
+                str(e),
+            )
+            return {}
 
     def afficher_informations(self):
         """
-        Affiche les informations du single (titre, artiste, date, lien Spotify, extrait audio).
+        Affiche les informations du single.
         """
         print("Titre :", self.titre)
         print("Artiste :", self.artiste)
         print("Date :", self.date)
-        print("Lien Spotify :", self.lien_spotify)
-        print("Extrait Audio :", self.extrait_audio)
+
+        if self.lien_spotify:
+            print("Lien Spotify :", self.lien_spotify)
+        else:
+            print("Lien Spotify non disponible")
+
+        if self.extrait_audio:
+            print("Extrait Audio :", self.extrait_audio)
+        else:
+            print("Extrait Audio non disponible")
 
     def jouer_extrait_audio(self):
         """
         Joue l'extrait audio du single s'il est trouvé, sinon affiche un message d'avertissement.
-
-        **Note:** Cette implémentation simule la lecture en affichant un message.
-        Vous devrez implémenter la lecture réelle en fonction de votre bibliothèque audio préférée (par exemple, pygame, playsound).
         """
         if self.extrait_audio:
             # Simule la lecture
@@ -100,24 +106,32 @@ class Single:
 
         Args:
             liste_info (list): La liste dans laquelle stocker les informations du single.
+
+        Returns:
+            liste_info (list): La liste mise à jour avec les informations du single.
         """
-        audio_info = self.rechercher_audio_artiste_titre()
-        info_single = {
-            "titre": self.titre,
-            "artiste": self.artiste,
-            "date": self.date,
-            "lien_spotify": self.lien_spotify,
-            "extrait_audio": self.extrait_audio}
+        try:
+            audio_info = self.rechercher_audio_artiste_titre()
+            info_single = {
+                "titre": self.titre,
+                "artiste": self.artiste,
+                "date": self.date,
+                "lien_spotify": self.lien_spotify,
+                "extrait_audio": self.extrait_audio,
+            }
 
-        liste_info.append(info_single)
+            liste_info.append(info_single)
 
-        return liste_info
-
-
+            return liste_info
+        except Exception as e:
+            print(
+                "Une erreur s'est produite lors du stockage des informations du single :",
+                str(e),
+            )
+            return liste_info
 
 
 from single import Single
-
 
 
 # Chargement des variables d'environnement
@@ -131,7 +145,7 @@ manager = Manager(client_id, client_secret)
 single = Single("Coup du marteau", "Tam sir", "Date du single")
 
 # Affichage des informations du single
-single.afficher_informations()
+# single.afficher_informations()
 
 # Jouez l'extrait audio du single
-#single.jouer_extrait_audio()
+single.jouer_extrait_audio()

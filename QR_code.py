@@ -38,7 +38,7 @@ class QRCodeGenerator:
         except Exception as e:
             raise Exception("Erreur lors de la génération des codes QR :", e)
 
-            raise Exception("Erreur lors de la génération des codes QR :", e)
+            
 
 
 # URL de la page à extraire

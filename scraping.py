@@ -7,6 +7,16 @@ import sqlite3
 from datetime import datetime
 import os
 import qrcode
+from reportlab.lib.pagesizes import letter
+
+from reportlab.pdfgen import canvas
+from PIL import Image
+
+
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.pdfgen import canvas
+
+
 
 
 class WikipediaScraper:
@@ -229,6 +239,7 @@ class WikipediaScraper:
 
         return singles
 
+    
     def generate_qr_codes(self, nom_dossier_sortie_qr_code):
         """
         Génère des codes QR pour les données des singles et les enregistre dans un dossier spécifié.
@@ -236,7 +247,7 @@ class WikipediaScraper:
         :param nom_dossier_sortie_qr_code: Le nom du dossier de sortie pour les codes QR.
 
         """
-
+        
         # Spécifiez le nom du dossier principal
         nom_dossier = "dossiers_de_sorties"
 
@@ -255,43 +266,189 @@ class WikipediaScraper:
         for single_data in self.singles:
             titre = single_data.get("titre", "")
             artiste = single_data.get("artiste", "")
-            date = single_data.get("date", "")
+            date_str = single_data.get("date", "")
 
-            single = Single(
-                single_data["titre"], single_data["artiste"], single_data["date"]
-            )
+            # Conversion de la chaîne de caractères en date
+            date_list = date_str.split(',')
+            for date_str in date_list:
+                try:
+                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
 
-            audio_info = single.rechercher_audio_artiste_titre()
+                    # Extraction de l'année
+                    annee = date.year
 
-            lien_spotify = audio_info.get("lien_spotify") if audio_info else None
-            extrait_audio = audio_info.get("extrait_audio") if audio_info else None
+                    single = Single(
+                        single_data["titre"], single_data["artiste"], single_data["date"]
+                    )
 
-            try:
-                lien = lien_spotify
-                qr = qrcode.QRCode(
-                    version=1,
-                    error_correction=qrcode.constants.ERROR_CORRECT_L,
-                    box_size=10,
-                    border=4,
-                )
-                if extrait_audio is not None:
-                    lien = extrait_audio
+                    audio_info = single.rechercher_audio_artiste_titre()
 
-                if lien is not None:
-                    qr.add_data(lien)
-                    qr.make(fit=True)
+                    lien_spotify = audio_info.get("lien_spotify") if audio_info else None
+                    extrait_audio = audio_info.get("extrait_audio") if audio_info else None
 
-                    # Enregistrez l'image du QR code dans le dossier spécifié avec un nom de fichier unique
-                    nom_fichier = f"qr_code_{titre}.png"
-                    chemin_fichier = os.path.join(chemin_sous_dossier, nom_fichier)
+                    lien = lien_spotify
+                    qr = qrcode.QRCode(
+                        version=1,
+                        error_correction=qrcode.constants.ERROR_CORRECT_L,
+                        box_size=10,
+                        border=4,
+                    )
+                    if extrait_audio is not None:
+                        lien = extrait_audio
 
-                    image = qr.make_image(fill_color="black", back_color="white")
-                    image.save(chemin_fichier)
+                    if lien is not None:
+                        qr.add_data(lien)
+                        qr.make(fit=True)
 
-            except Exception as e:
-                print(f"Error generating QR code for {titre} by {artiste}: {str(e)}")
+                        # Enregistrez l'image du QR code dans le dossier spécifié avec un nom de fichier unique
+                        nom_fichier = f"qr_code_{titre}_{artiste}_{annee}.png"
+                        chemin_fichier = os.path.join(chemin_sous_dossier, nom_fichier)
 
+                        image = qr.make_image(fill_color="black", back_color="white")
+                        image.save(chemin_fichier)
 
+                except Exception as e:
+                    print(f"Erreur lors de la génération du code QR pour {titre} par {artiste} : {str(e)}")
+    
+              
+                
+    def generate_PDF(self, nom_dossier_qr_codes, nom_dossier_sortie_pdf,dimension_qr_code):
+        """
+        Génère des fichiers PDF à partir des codes QR contenus dans un dossier spécifié.
+
+        Args:
+            nom_dossier_qr_codes (str): Le nom du dossier contenant les codes QR.
+            nom_dossier_sortie_pdf (str): Le nom du dossier de sortie pour les fichiers PDF.
+
+        Returns:
+            None
+
+        Raises:
+            FileNotFoundError: Si le dossier contenant les codes QR ou le dossier de sortie pour les PDF n'existe pas.
+            Exception: Si une erreur survient lors de la génération des PDF.
+
+        """
+        try:
+            # Spécifiez le nom du dossier principal
+            nom_dossier = "dossiers_de_sorties"
+
+            # Obtenez le chemin absolu du dossier principal en utilisant le chemin courant du script
+            chemin_dossier_principal = os.path.abspath(nom_dossier)
+
+            # Obtenez le chemin absolu du dossier contenant les codes QR
+            chemin_dossier_qr_codes = os.path.join(chemin_dossier_principal, nom_dossier_qr_codes)
+
+            # Obtenez le chemin absolu du dossier de sortie pour les PDF
+            chemin_dossier_sortie_pdf = os.path.join(chemin_dossier_principal, nom_dossier_sortie_pdf)
+
+            dimension =dimension_qr_code
+
+            # Vérifiez si le dossier contenant les codes QR existe
+            if not os.path.exists(chemin_dossier_qr_codes):
+                raise FileNotFoundError(f"Le dossier '{nom_dossier_qr_codes}' n'existe pas.")
+
+            # Créez le dossier de sortie pour les PDF s'il n'existe pas déjà
+            os.makedirs(chemin_dossier_sortie_pdf, exist_ok=True)
+
+            # Parcourez les fichiers des codes QR
+            for nom_fichier in os.listdir(chemin_dossier_qr_codes):
+                if nom_fichier.endswith(".png"):
+                    chemin_fichier_qr_code = os.path.join(chemin_dossier_qr_codes, nom_fichier)
+
+                    # Créez un nouveau PDF pour chaque code QR
+                    nom_fichier_pdf = f"{nom_fichier[:-4]}.pdf"
+                    chemin_fichier_pdf = os.path.join(chemin_dossier_sortie_pdf, nom_fichier_pdf)
+
+                    try:
+                        
+                        # Créez un objet Canvas pour le PDF
+                        
+                        pdf = canvas.Canvas(chemin_fichier_pdf, pagesize=landscape(letter))
+
+                        # Supprimez la partie "qr_code_" au début du nom de fichier
+                        nom_fichier_sans_prefixe = nom_fichier.replace("qr_code_", "")
+
+                        # Supprimez l'extension ".png" à la fin du nom de fichier
+                        nom_fichier_sans_extension = nom_fichier_sans_prefixe.replace(".png", "")
+
+                        # Divisez le nom de fichier en utilisant le caractère "_" comme séparateur
+                        elements = nom_fichier_sans_extension.split("_")
+
+                        # Le premier élément de la liste est le titre
+                        titre = elements[0]
+
+                        # Le deuxième élément de la liste est l'artiste
+                        artiste = elements[1]
+
+                        # Le troisième élément de la liste est l'année
+                        annee = elements[2]
+
+                        # Calculez les coordonnées pour placer le carré au centre de la page
+                        page_width, page_height = landscape(letter)
+                        square_size = dimension # Taille du carré
+                        square_x = (page_width - square_size) / 2
+                        square_y = (page_height - square_size) / 2
+
+                        # Dessinez le carré sur la première page du PDF
+                        pdf.rect(square_x, square_y, square_size, square_size)
+                        pdf.setFont("Helvetica", 12)
+
+                        # Calculez les coordonnées pour placer le texte dans le carré
+                        text_x = square_x + 10
+                        text_y = square_y + square_size - 50  # Décalez légèrement le titre vers le haut
+
+                        # Vérifiez si le texte du titre dépasse le carré
+                        if pdf.stringWidth(titre, "Helvetica-Bold", 30) > square_size - 20:
+                            pdf.setFont("Helvetica-Bold", 20)  # Réduisez la taille de police pour le titre
+                            pdf.drawCentredString(square_x + (square_size / 2), text_y, titre[:30] + "\n" + titre[30:])
+                        else:
+                            pdf.setFont("Helvetica-Bold", 30)  # Utilisez la taille de police normale pour le titre
+                            pdf.drawCentredString(square_x + (square_size / 2), text_y, titre)
+
+                        # Calculez les coordonnées pour placer le texte de l'artiste dans le carré
+                        text_x = square_x + 10
+                        text_y = square_y + 30  # Décalez légèrement l'artiste vers le bas
+
+                        # Vérifiez si le texte de l'artiste dépasse le carré
+                        if pdf.stringWidth(artiste, "Helvetica", 30) > square_size - 20:
+                            pdf.setFont("Helvetica", 20)  # Réduisez la taille de police pour l'artiste
+                            pdf.drawCentredString(square_x + (square_size / 2), text_y, artiste[:30] + "\n" + artiste[30:])
+                        else:
+                            pdf.setFont("Helvetica", 30)  # Utilisez la taille de police normale pour l'artiste
+                            pdf.drawCentredString(square_x + (square_size / 2), text_y, artiste)
+
+                        # Vérifiez si le texte de l'année dépasse le carré
+                        if pdf.stringWidth(annee, "Helvetica", 60) > square_size - 20:
+                            pdf.setFont("Helvetica", 40)  # Réduisez la taille de police pour l'année
+                            pdf.drawCentredString(square_x + (square_size / 2), square_y + (square_size / 2), annee[:4] + "\n" + annee[4:])
+                        else:
+                            pdf.setFont("Helvetica", 60)  # Utilisez la taille de police normale pour l'année
+                            pdf.drawCentredString(square_x + (square_size / 2), square_y + (square_size / 2), annee)
+
+                        # Ajoutez le code QR sur la deuxième page du PDF
+                        pdf.showPage()
+                        # Calculez les coordonnées pour centrer le code QR
+                        
+                        qr_code_width = dimension
+                        qr_code_height = dimension
+                        qr_code_x = (page_width - qr_code_width) / 2
+                        qr_code_y = (page_height - qr_code_height) / 2
+
+                        pdf.drawInlineImage(chemin_fichier_qr_code, qr_code_x, qr_code_y, width=qr_code_width, height=qr_code_height)
+
+                        # Sauvegardez le PDF
+                        pdf.save()
+
+                    except Exception as e:
+                        print(f"Une erreur est survenue lors de la génération du PDF '{nom_fichier_pdf}': {e}")
+
+        except FileNotFoundError as e:
+            print(e)
+        except Exception as e:
+            print(f"Une erreur est survenue lors de la génération des PDF : {e}")
+    
+    
+    
 # Exemple d'utilisation des methodes
 
 
@@ -311,6 +468,14 @@ scraper = WikipediaScraper(url)
 scraper.scrape()
 
 # scraper.rechercher_extraits_audio()
+
+# Génération des codes QR
+nom_dossier_sortie_pdf = "PDF"
+nom_dossier_qr_codes = "image_qr_code"
+dimension_qr_code= 400
+#scraper.generate_qr_codes(nom_dossier_qr_codes)
+
+scraper.generate_PDF(nom_dossier_qr_codes, nom_dossier_sortie_pdf,dimension_qr_code)
 
 
 # Test de la méthode get_singles_info

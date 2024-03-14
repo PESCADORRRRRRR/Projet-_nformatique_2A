@@ -38,8 +38,6 @@ class QRCodeGenerator:
         except Exception as e:
             raise Exception("Erreur lors de la génération des codes QR :", e)
 
-            
-
 
 # URL de la page à extraire
 url = "https://fr.wikipedia.org/wiki/Liste_des_singles_num%C3%A9ro_un_en_France"

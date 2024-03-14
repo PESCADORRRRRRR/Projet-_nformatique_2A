@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramme de classes - QRCodeGenerator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.0/mermaid.min.js"></script>
+</head>
+<body>
+    <h1>Diagramme de classes - QRCodeGenerator</h1>
+
+    <div class="mermaid">
+        graph LR
+            A(QRCodeGenerator) --> B((WikipediaScraper))
+            A --> C[generate_qr_code]
+            B --> D[scrape]
+            B --> E[generate_qr_codes]
+
+            /* Classes: */
+            class QRCodeGenerator {
+                url: String
+                scraper: WikipediaScraper
+
+                + __init__(url: String)
+                    * Initializes an instance of QRCodeGenerator with a specified URL.
+                + generate_qr_code(nom_dossier_sortie_qr_code: String)
+                    * Generates a QR code based on information retrieved from the scraper and saves it to the specified output directory.
+            }
+
+            class WikipediaScraper {
+                url: String
+
+                + __init__(url: String)
+                    * Initializes an instance of WikipediaScraper with a specified URL.
+                + scrape()
+                    * Scrapes content from the provided Wikipedia URL.
+                + generate_qr_codes(nom_dossier_sortie_qr_code: String)
+                    * Generates QR codes for the scraped content (potentially) and saves them to the specified output directory.
+            }
+
+            /* Explanation: */
+
+            * **Classes:**
+                * **QRCodeGenerator:** This class is responsible for generating QR codes. It utilizes a `WikipediaScraper` object to retrieve the data for the QR code.
+                * **WikipediaScraper:** This class is dedicated to scraping content from Wikipedia URLs. It can also potentially generate QR codes based on the scraped information.
+
+            **Arrows:**
+
+            * **A --> B:** Indicates that a `QRCodeGenerator` object has a dependency on a `WikipediaScraper` object.
+            * **A --> C:** Represents the action of a `QRCodeGenerator` generating a QR code.
+            * **B --> D:** Shows the scraping functionality of the `WikipediaScraper`.
+            * **B --> E:** Denotes the optional ability of the `WikipediaScraper` to generate QR codes.
+
+            **Methods:**
+
+            * **__init__(url: String):** Both classes have an initializer method that takes a URL as input.
+            * **generate_qr_code(nom_dossier_sortie_qr_code: String):** Specific to `QRCodeGenerator`, this method generates a QR code.
+            * **scrape():** Method of `WikipediaScraper` that performs the scraping operation.
+            
+        </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>

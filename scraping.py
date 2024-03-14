@@ -17,8 +17,6 @@ from reportlab.lib.pagesizes import letter, landscape
 from reportlab.pdfgen import canvas
 
 
-
-
 class WikipediaScraper:
     """
     Classe utilisée pour extraire et manipuler les données des singles numéro un en France à partir de Wikipedia.
@@ -239,7 +237,6 @@ class WikipediaScraper:
 
         return singles
 
-    
     def generate_qr_codes(self, nom_dossier_sortie_qr_code):
         """
         Génère des codes QR pour les données des singles et les enregistre dans un dossier spécifié.
@@ -247,7 +244,7 @@ class WikipediaScraper:
         :param nom_dossier_sortie_qr_code: Le nom du dossier de sortie pour les codes QR.
 
         """
-        
+
         # Spécifiez le nom du dossier principal
         nom_dossier = "dossiers_de_sorties"
 
@@ -269,7 +266,7 @@ class WikipediaScraper:
             date_str = single_data.get("date", "")
 
             # Conversion de la chaîne de caractères en date
-            date_list = date_str.split(',')
+            date_list = date_str.split(",")
             for date_str in date_list:
                 try:
                     date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
@@ -278,13 +275,19 @@ class WikipediaScraper:
                     annee = date.year
 
                     single = Single(
-                        single_data["titre"], single_data["artiste"], single_data["date"]
+                        single_data["titre"],
+                        single_data["artiste"],
+                        single_data["date"],
                     )
 
                     audio_info = single.rechercher_audio_artiste_titre()
 
-                    lien_spotify = audio_info.get("lien_spotify") if audio_info else None
-                    extrait_audio = audio_info.get("extrait_audio") if audio_info else None
+                    lien_spotify = (
+                        audio_info.get("lien_spotify") if audio_info else None
+                    )
+                    extrait_audio = (
+                        audio_info.get("extrait_audio") if audio_info else None
+                    )
 
                     lien = lien_spotify
                     qr = qrcode.QRCode(
@@ -308,11 +311,13 @@ class WikipediaScraper:
                         image.save(chemin_fichier)
 
                 except Exception as e:
-                    print(f"Erreur lors de la génération du code QR pour {titre} par {artiste} : {str(e)}")
-    
-              
-                
-    def generate_PDF(self, nom_dossier_qr_codes, nom_dossier_sortie_pdf,dimension_qr_code):
+                    print(
+                        f"Erreur lors de la génération du code QR pour {titre} par {artiste} : {str(e)}"
+                    )
+
+    def generate_PDF(
+        self, nom_dossier_qr_codes, nom_dossier_sortie_pdf, dimension_qr_code
+    ):
         """
         Génère des fichiers PDF à partir des codes QR contenus dans un dossier spécifié.
 
@@ -336,16 +341,22 @@ class WikipediaScraper:
             chemin_dossier_principal = os.path.abspath(nom_dossier)
 
             # Obtenez le chemin absolu du dossier contenant les codes QR
-            chemin_dossier_qr_codes = os.path.join(chemin_dossier_principal, nom_dossier_qr_codes)
+            chemin_dossier_qr_codes = os.path.join(
+                chemin_dossier_principal, nom_dossier_qr_codes
+            )
 
             # Obtenez le chemin absolu du dossier de sortie pour les PDF
-            chemin_dossier_sortie_pdf = os.path.join(chemin_dossier_principal, nom_dossier_sortie_pdf)
+            chemin_dossier_sortie_pdf = os.path.join(
+                chemin_dossier_principal, nom_dossier_sortie_pdf
+            )
 
-            dimension =dimension_qr_code
+            dimension = dimension_qr_code
 
             # Vérifiez si le dossier contenant les codes QR existe
             if not os.path.exists(chemin_dossier_qr_codes):
-                raise FileNotFoundError(f"Le dossier '{nom_dossier_qr_codes}' n'existe pas.")
+                raise FileNotFoundError(
+                    f"Le dossier '{nom_dossier_qr_codes}' n'existe pas."
+                )
 
             # Créez le dossier de sortie pour les PDF s'il n'existe pas déjà
             os.makedirs(chemin_dossier_sortie_pdf, exist_ok=True)
@@ -353,23 +364,31 @@ class WikipediaScraper:
             # Parcourez les fichiers des codes QR
             for nom_fichier in os.listdir(chemin_dossier_qr_codes):
                 if nom_fichier.endswith(".png"):
-                    chemin_fichier_qr_code = os.path.join(chemin_dossier_qr_codes, nom_fichier)
+                    chemin_fichier_qr_code = os.path.join(
+                        chemin_dossier_qr_codes, nom_fichier
+                    )
 
                     # Créez un nouveau PDF pour chaque code QR
                     nom_fichier_pdf = f"{nom_fichier[:-4]}.pdf"
-                    chemin_fichier_pdf = os.path.join(chemin_dossier_sortie_pdf, nom_fichier_pdf)
+                    chemin_fichier_pdf = os.path.join(
+                        chemin_dossier_sortie_pdf, nom_fichier_pdf
+                    )
 
                     try:
-                        
+
                         # Créez un objet Canvas pour le PDF
-                        
-                        pdf = canvas.Canvas(chemin_fichier_pdf, pagesize=landscape(letter))
+
+                        pdf = canvas.Canvas(
+                            chemin_fichier_pdf, pagesize=landscape(letter)
+                        )
 
                         # Supprimez la partie "qr_code_" au début du nom de fichier
                         nom_fichier_sans_prefixe = nom_fichier.replace("qr_code_", "")
 
                         # Supprimez l'extension ".png" à la fin du nom de fichier
-                        nom_fichier_sans_extension = nom_fichier_sans_prefixe.replace(".png", "")
+                        nom_fichier_sans_extension = nom_fichier_sans_prefixe.replace(
+                            ".png", ""
+                        )
 
                         # Divisez le nom de fichier en utilisant le caractère "_" comme séparateur
                         elements = nom_fichier_sans_extension.split("_")
@@ -385,7 +404,7 @@ class WikipediaScraper:
 
                         # Calculez les coordonnées pour placer le carré au centre de la page
                         page_width, page_height = landscape(letter)
-                        square_size = dimension # Taille du carré
+                        square_size = dimension  # Taille du carré
                         square_x = (page_width - square_size) / 2
                         square_y = (page_height - square_size) / 2
 
@@ -395,60 +414,106 @@ class WikipediaScraper:
 
                         # Calculez les coordonnées pour placer le texte dans le carré
                         text_x = square_x + 10
-                        text_y = square_y + square_size - 50  # Décalez légèrement le titre vers le haut
+                        text_y = (
+                            square_y + square_size - 50
+                        )  # Décalez légèrement le titre vers le haut
 
                         # Vérifiez si le texte du titre dépasse le carré
-                        if pdf.stringWidth(titre, "Helvetica-Bold", 30) > square_size - 20:
-                            pdf.setFont("Helvetica-Bold", 20)  # Réduisez la taille de police pour le titre
-                            pdf.drawCentredString(square_x + (square_size / 2), text_y, titre[:30] + "\n" + titre[30:])
+                        if (
+                            pdf.stringWidth(titre, "Helvetica-Bold", 30)
+                            > square_size - 20
+                        ):
+                            pdf.setFont(
+                                "Helvetica-Bold", 20
+                            )  # Réduisez la taille de police pour le titre
+                            pdf.drawCentredString(
+                                square_x + (square_size / 2),
+                                text_y,
+                                titre[:30] + "\n" + titre[30:],
+                            )
                         else:
-                            pdf.setFont("Helvetica-Bold", 30)  # Utilisez la taille de police normale pour le titre
-                            pdf.drawCentredString(square_x + (square_size / 2), text_y, titre)
+                            pdf.setFont(
+                                "Helvetica-Bold", 30
+                            )  # Utilisez la taille de police normale pour le titre
+                            pdf.drawCentredString(
+                                square_x + (square_size / 2), text_y, titre
+                            )
 
                         # Calculez les coordonnées pour placer le texte de l'artiste dans le carré
                         text_x = square_x + 10
-                        text_y = square_y + 30  # Décalez légèrement l'artiste vers le bas
+                        text_y = (
+                            square_y + 30
+                        )  # Décalez légèrement l'artiste vers le bas
 
                         # Vérifiez si le texte de l'artiste dépasse le carré
                         if pdf.stringWidth(artiste, "Helvetica", 30) > square_size - 20:
-                            pdf.setFont("Helvetica", 20)  # Réduisez la taille de police pour l'artiste
-                            pdf.drawCentredString(square_x + (square_size / 2), text_y, artiste[:30] + "\n" + artiste[30:])
+                            pdf.setFont(
+                                "Helvetica", 20
+                            )  # Réduisez la taille de police pour l'artiste
+                            pdf.drawCentredString(
+                                square_x + (square_size / 2),
+                                text_y,
+                                artiste[:30] + "\n" + artiste[30:],
+                            )
                         else:
-                            pdf.setFont("Helvetica", 30)  # Utilisez la taille de police normale pour l'artiste
-                            pdf.drawCentredString(square_x + (square_size / 2), text_y, artiste)
+                            pdf.setFont(
+                                "Helvetica", 30
+                            )  # Utilisez la taille de police normale pour l'artiste
+                            pdf.drawCentredString(
+                                square_x + (square_size / 2), text_y, artiste
+                            )
 
                         # Vérifiez si le texte de l'année dépasse le carré
                         if pdf.stringWidth(annee, "Helvetica", 60) > square_size - 20:
-                            pdf.setFont("Helvetica", 40)  # Réduisez la taille de police pour l'année
-                            pdf.drawCentredString(square_x + (square_size / 2), square_y + (square_size / 2), annee[:4] + "\n" + annee[4:])
+                            pdf.setFont(
+                                "Helvetica", 40
+                            )  # Réduisez la taille de police pour l'année
+                            pdf.drawCentredString(
+                                square_x + (square_size / 2),
+                                square_y + (square_size / 2),
+                                annee[:4] + "\n" + annee[4:],
+                            )
                         else:
-                            pdf.setFont("Helvetica", 60)  # Utilisez la taille de police normale pour l'année
-                            pdf.drawCentredString(square_x + (square_size / 2), square_y + (square_size / 2), annee)
+                            pdf.setFont(
+                                "Helvetica", 60
+                            )  # Utilisez la taille de police normale pour l'année
+                            pdf.drawCentredString(
+                                square_x + (square_size / 2),
+                                square_y + (square_size / 2),
+                                annee,
+                            )
 
                         # Ajoutez le code QR sur la deuxième page du PDF
                         pdf.showPage()
                         # Calculez les coordonnées pour centrer le code QR
-                        
+
                         qr_code_width = dimension
                         qr_code_height = dimension
                         qr_code_x = (page_width - qr_code_width) / 2
                         qr_code_y = (page_height - qr_code_height) / 2
 
-                        pdf.drawInlineImage(chemin_fichier_qr_code, qr_code_x, qr_code_y, width=qr_code_width, height=qr_code_height)
+                        pdf.drawInlineImage(
+                            chemin_fichier_qr_code,
+                            qr_code_x,
+                            qr_code_y,
+                            width=qr_code_width,
+                            height=qr_code_height,
+                        )
 
                         # Sauvegardez le PDF
                         pdf.save()
 
                     except Exception as e:
-                        print(f"Une erreur est survenue lors de la génération du PDF '{nom_fichier_pdf}': {e}")
+                        print(
+                            f"Une erreur est survenue lors de la génération du PDF '{nom_fichier_pdf}': {e}"
+                        )
 
         except FileNotFoundError as e:
             print(e)
         except Exception as e:
             print(f"Une erreur est survenue lors de la génération des PDF : {e}")
-    
-    
-    
+
+
 # Exemple d'utilisation des methodes
 
 
@@ -472,10 +537,10 @@ scraper.scrape()
 # Génération des codes QR
 nom_dossier_sortie_pdf = "PDF"
 nom_dossier_qr_codes = "image_qr_code"
-dimension_qr_code= 400
-#scraper.generate_qr_codes(nom_dossier_qr_codes)
+dimension_qr_code = 400
+# scraper.generate_qr_codes(nom_dossier_qr_codes)
 
-scraper.generate_PDF(nom_dossier_qr_codes, nom_dossier_sortie_pdf,dimension_qr_code)
+scraper.generate_PDF(nom_dossier_qr_codes, nom_dossier_sortie_pdf, dimension_qr_code)
 
 
 # Test de la méthode get_singles_info

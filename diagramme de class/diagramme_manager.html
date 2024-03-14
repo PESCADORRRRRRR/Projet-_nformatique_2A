@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramme de classes - Manager complet</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.0/mermaid.min.js"></script>
+</head>
+<body>
+    <h1>Diagramme de classes - Manager complet</h1>
+
+    <div class="mermaid">
+        graph LR
+        A(Manager)
+        B(SpotifyAPI)
+
+        A --> B[get_access_token]
+        B --> C[search_track]
+
+        class Manager {
+            client_id: String
+            client_secret: String
+
+            + __init__(client_id: String, client_secret: String)
+            + rechercher_audio_artiste_titre(artist_name: String, song_title: String): dict or None
+        }
+
+        class SpotifyAPI {
+            access_token: String
+
+            + get_access_token(client_id: String, client_secret: String): String
+            + search_track(artist_name: String, song_title: String, access_token: String): dict or None
+        }
+
+        /* Explication du diagramme: */
+
+        **Classes:**
+
+        * **Manager:** Classe principale qui gère les recherches audio.
+        * **SpotifyAPI:** Classe qui s'occupe de l'interaction avec l'API Spotify.
+
+        **Attributs:**
+
+        * **client_id et client_secret:** Attributs de la classe `Manager` pour les identifiants Spotify.
+        * **access_token:** Attribut de la classe `SpotifyAPI` pour le jeton d'accès à l'API Spotify.
+
+        **Méthodes:**
+
+        * **__init__:** Initialise les instances des classes.
+        * **rechercher_audio_artiste_titre:** Méthode principale de la classe `Manager` qui effectue la recherche audio.
+        * **get_access_token:** Méthode de la classe `SpotifyAPI` pour obtenir le jeton d'accès.
+        * **search_track:** Méthode de la classe `SpotifyAPI` pour rechercher une piste sur Spotify.
+
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>

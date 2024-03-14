@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramme de classes - PDFGenerator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.0/mermaid.min.js"></script>
+</head>
+<body>
+    <h1>Diagramme de classes - PDFGenerator</h1>
+
+    <div class="mermaid">
+        graph LR
+        A(PDFGenerator) --> B((WikipediaScraper))
+        A --> C[generate_PDF]
+        B --> D[scrape]
+        B --> E[generate_PDF]
+
+        /* Classes: */
+        class PDFGenerator {
+            url: String
+            scraper: WikipediaScraper
+
+            + __init__(url: String)
+                * Initialise un générateur de PDF avec une URL spécifiée.
+            + generate_PDF(nom_dossier_qr_codes: String, nom_dossier_sortie_pdf: String, dimension_qr_code: Int)
+                * Génère des PDF à partir des informations récupérées du scraper et les enregistre dans le répertoire de sortie spécifié.
+        }
+
+        class WikipediaScraper {
+            url: String
+
+            + __init__(url: String)
+                * Initialise un scraper Wikipedia avec une URL spécifiée.
+            + scrape()
+                * Scrappe le contenu de l'URL Wikipedia fournie.
+            + generate_PDF(nom_dossier_qr_codes: String, nom_dossier_sortie_pdf: String, dimension_qr_code: Int)
+                * Génère des PDF à partir du contenu scrappé.
+        }
+
+        /* Explication: */
+
+        * **Classes:**
+            * **PDFGenerator:** Cette classe est responsable de la génération de fichiers PDF. Elle utilise un objet `WikipediaScraper` pour récupérer les données des singles.
+            * **WikipediaScraper:** Cette classe est dédiée au scraping de contenu à partir d'URL Wikipedia. Elle peut ensuite générer des PDF à partir des informations scrappées.
+
+        * **Flèches:**
+
+            * **A --> B:** Indique qu'un objet `PDFGenerator` dépend d'un objet `WikipediaScraper`.
+            * **A --> C:** Représente l'action d'un `PDFGenerator` générant des PDF.
+            * **B --> D:** Montre la fonctionnalité de scraping du `WikipediaScraper`.
+            * **B --> E:** Dénote la capacité du `WikipediaScraper` à générer des PDF.
+
+        * **Méthodes:**
+
+            * **__init__(url: String):** Les deux classes ont une méthode d'initialisation qui prend une URL en entrée.
+            * **generate_PDF(nom_dossier_qr_codes: String, nom_dossier_sortie_pdf: String, dimension_qr_code: Int):** Spécifique à `PDFGenerator`, cette méthode génère des PDF.
+            * **scrape():** Méthode de `WikipediaScraper` qui effectue l'opération de scraping.
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramme de classes - Single</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.0/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="mermaid">
+        classDiagram
+        class Single {
+            titre: String
+            artiste: String
+            date: String
+            lien_spotify: String
+            extrait_audio: String
+            manager: Manager
+
+            + __init__(titre: String, artiste: String, date: String)
+            + rechercher_audio_artiste_titre(): dict
+            + afficher_informations()
+            + jouer_extrait_audio()
+            + stocker_info(liste_info: list): list
+        }
+        class Manager {
+            client_id: String
+            client_secret: String
+
+            + __init__(client_id: String, client_secret: String)
+            + rechercher_audio_artiste_titre(artiste: String, titre: String): dict
+        }
+        </div>
+    </body>
+</html>

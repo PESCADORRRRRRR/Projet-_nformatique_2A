@@ -71,6 +71,7 @@ class Partie:
             print("La partie va commencer !")
             joueur_actuel = self.joueurs[0]
             jury = self.joueurs[1]
+            
 
             while True:
                 print(f"C'est au tour de {joueur_actuel.nom} de jouer.")
@@ -86,6 +87,7 @@ class Partie:
 
                     if jury and self.poser_question_au_jury(jury):
                         joueur_actuel.incrementer_score()
+                        
                         print(f"Le joueur {joueur_actuel.nom} a trouvé la musique et gagne 1 point !")
                         if joueur_actuel.score >= self.score_max:
                             print(f"Le joueur {joueur_actuel.nom} a atteint {self.score_max} points. Il remporte la partie !")
@@ -100,11 +102,14 @@ class Partie:
                 
                 index_jury_suivant = (index_joueur_suivant + 1) % len(self.joueurs)
                 jury = self.joueurs[index_jury_suivant]
+                
+                
 
                 # Afficher le score de chaque joueur avant que le joueur suivant ne commence à jouer
-                print("Scores actuels :")
-                for joueur in self.joueurs:
-                    print(f"Score de {joueur.nom} : {joueur.score}")
+                if index_joueur_suivant== 0:
+                    print("Scores actuels :")
+                    for joueur in self.joueurs:
+                        print(f"Score de {joueur.nom} : {joueur.score}")
 
             # Afficher le score final de chaque joueur
             print("Scores finaux :")

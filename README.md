@@ -42,9 +42,7 @@ Trois options d'installation sont disponibles :
 
 1. ## Installation avec Docker (recommandé)
 
-- Assurez-vous d'avoir Docker installé sur votre machine. 
-
-[Lien pour cloner le dépôt.](https://github.com/PESCADORRRRRRR/Projet-_nformatique_2A/tree/main)
+- Assurez-vous d'avoir Docker installé sur votre machine: [Lien pour cloner le dépôt.](https://github.com/PESCADORRRRRRR/Projet-_nformatique_2A/tree/main)
 
 - Installer Docker.
 - Construire l'image Docker :
@@ -140,7 +138,7 @@ Cela exécutera les tests correspondants à partir des dossiers de tests spécif
 
 N'hésitez pas à consulter le fichier `tox.ini` pour plus de détails sur la configuration des tests.
 
-### Organisation des tests
+#### Organisation des tests
 Les tests sont organisés en trois catégories principales :
 
 -Tests unitaires : Ils vérifient le bon fonctionnement des différentes unités de code, telles que les fonctions, les méthodes ou les classes. Les fichiers de test correspondants se trouvent dans le répertoire tests/tests_unitaires et ont des noms se terminant par tests.py.

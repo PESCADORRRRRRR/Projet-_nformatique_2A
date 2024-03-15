@@ -42,7 +42,7 @@ Trois options d'installation sont disponibles :
 
 1. ## Installation avec Docker (recommandé)
 
-- Assurez-vous d'avoir Docker installé sur votre machine: [Lien pour cloner le dépôt.](https://github.com/PESCADORRRRRRR/Projet-_nformatique_2A/tree/main)
+- Assurez-vous d'avoir Docker installé sur votre machine
 
 - Installer Docker.
 - Construire l'image Docker :

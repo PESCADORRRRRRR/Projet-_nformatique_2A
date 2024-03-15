@@ -141,11 +141,14 @@ N'hésitez pas à consulter le fichier `tox.ini` pour plus de détails sur la co
 #### Organisation des tests
 Les tests sont organisés en trois catégories principales :
 
--Tests unitaires : Ils vérifient le bon fonctionnement des différentes unités de code, telles que les fonctions, les méthodes ou les classes. Les fichiers de test correspondants se trouvent dans le répertoire tests/tests_unitaires et ont des noms se terminant par tests.py.
+- #### Tests unitaires : 
+Ils vérifient le bon fonctionnement des différentes unités de code, telles que les fonctions, les méthodes ou les classes. Les fichiers de test correspondants se trouvent dans le répertoire tests/tests_unitaires et ont des noms se terminant par tests.py.
 
--Tests statiques : Ils vérifient la conformité du code aux normes de style et aux bonnes pratiques. Ces tests sont utiles pour assurer la lisibilité et la maintenabilité du code. Les fichiers de test correspondants se trouvent dans le répertoire tests/_tests_static et ont des noms se terminant par _tests.py.
+- #### Tests statiques : 
+Ils vérifient la conformité du code aux normes de style et aux bonnes pratiques. Ces tests sont utiles pour assurer la lisibilité et la maintenabilité du code. Les fichiers de test correspondants se trouvent dans le répertoire tests/_tests_static et ont des noms se terminant par _tests.py.
 
--Tests d'isolation : Ils vérifient l'isolation des fonctionnalités et des dépendances. Ces tests sont importants pour s'assurer qu'une unité de code fonctionne correctement de manière indépendante sans interférence avec d'autres parties du système. Les fichiers de test correspondants se trouvent dans le répertoire tests/tests_isolation et ont des noms se terminant par _tests.py.
+- #### Tests d'isolation : 
+Ils vérifient l'isolation des fonctionnalités et des dépendances. Ces tests sont importants pour s'assurer qu'une unité de code fonctionne correctement de manière indépendante sans interférence avec d'autres parties du système. Les fichiers de test correspondants se trouvent dans le répertoire tests/tests_isolation et ont des noms se terminant par _tests.py.
 
 ## Diagrammes de Classe
 

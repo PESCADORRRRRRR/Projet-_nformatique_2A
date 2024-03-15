@@ -1,12 +1,44 @@
-# Titre du projet
+# Génération de cartes pour un jeu de société quizz musical - Hitster
 
-## Description
+Ce projet vise à générer des cartes pour un jeu de société quizz musical basé sur le concept de Hitster. Hitster est un jeu de quizz musical dans lequel les joueurs doivent retrouver le titre et l'artiste de différents titres populaires de différentes époques, et les ordonner dans l'ordre chronologique.
 
-ABC
+## Concept
+
+Le jeu de société Hitster utilise des cartes qui contiennent un QR code vers un extrait audio du titre sur Spotify, ainsi que des informations telles que l'année, l'artiste et le titre de la chanson. L'objectif de ce projet est de générer notre propre jeu Hitster, car le jeu de base est limité en termes de cartes.
+
+## Implémentation
+
+Nous utilisons l'API Spotify pour récupérer les informations sur les titres musicaux, y compris les extraits audio. Nous extrayons également les données à partir de la liste des singles numéro un en France disponible sur Wikipedia. Les étapes d'implémentation comprennent :
+
+1. Scraping de la liste des singles numéro un en France à partir de la page Wikipedia.
+
+2. Récupération des informations sur les titres musicaux à partir de l'API Spotify en utilisant un jeton d'API valide.
+
+3. Recherche des extraits audio correspondants à chaque titre à l'aide de l'API Spotify.
+
+4. Génération de fichiers PDF pour chaque extrait audio contenant un QR code vers l'extrait et les informations sur l'artiste, le titre et la date de l'œuvre.
+
+Les fichiers PDF générés peuvent ensuite être imprimés et utilisés comme cartes dans le jeu de société Hitster.
+
+
+## Prérequis
+
+vant d'exécuter le code, vous devez vous assurer d'avoir les éléments suivants :
+
+- Un jeton d'API valide pour accéder à l'API Spotify.
+- Les bibliothèques et dépendances requises, qui sont répertoriées dans le fichier requirements.txt.
+
+## Utilisation
+
+1. Exécutez le script main.py pour générer les fichiers PDF des cartes.
+
+2. Les fichiers PDF seront enregistrés dans le répertoire output/.
+
+3. Vous pouvez maintenant imprimer les fichiers PDF et les utiliser dans le jeu de société Hitster.
 
 ## Installation
 
-Deux options d'installation sont disponibles :
+Trois options d'installation sont disponibles :
 
 1. **Installation avec Docker (recommandé) :**
 
@@ -44,7 +76,9 @@ Exécutez la commande suivante pour lancer Pylint sur chaque fichier :
 pylint scraping.py
 pylint manager.py
 pylint single.py
-pylint qr_code.py
+pylint QR_code.py
+code_pdf.py
+jeu.py
 
 ## Dépendances
 
@@ -53,39 +87,77 @@ Ce projet utilise les dépendances suivantes :
 - beautifulsoup4==4.10.0
 - qrcode==1.15.0
 - requests==2.27.1
-- spotify (module local)
 
-## Test
 
-Pour exécuter les tests de ce projet, nous utilisons `tox` pour automatiser le processus. Assurez-vous d'avoir `tox` installé sur votre système.
+
+## Tests
+
+Ce projet comprend des tests pour garantir la qualité du code et la fiabilité des fonctionnalités. Les tests sont organisés en plusieurs catégories : tests unitaires, tests statiques et tests d'isolation.
+
+### Exécution des tests
+
+Pour exécuter tous les tests, vous devez avoir l'environnement Tox installé. Si vous ne l'avez pas encore, vous pouvez l'installer en utilisant la commande suivante :
+
+```shell
+pip install tox
+```
 
 Pour exécuter les tests, suivez les étapes suivantes :
 
 1. Installez les dépendances nécessaires :
 pip install pytest coverage
 
-2. À la racine du projet, exécutez `tox` avec la commande appropriée pour l'environnement Python souhaité :
+2. À la racine du projet, exécutez la commande suivante pour lancer les tests dans des environnements virtuels isolés :
+
+```
+  tox 
+```
+Cela exécutera les tests dans des environnements virtuels isolés afin de garantir la reproductibilité des résultats.
+
+
+3. Si vous souhaitez exécuter des tests spécifiques pour un environnement Python particulier, utilisez la commande appropriée :
 - Pour exécuter les tests unitaires et statiques :
   ```
-  tox -e py38
+  tox -e py
   ```
-
 - Pour exécuter les tests d'isolation :
   ```
-  tox -e py39
+  tox -e isolation
   ```
-
 - Pour exécuter les tests fonctionnels :
   ```
-  tox -e py38-functional  # Pour Python 3.8
-  tox -e py39-functional  # Pour Python 3.9
+  tox -e fonctionnels
+ 
   ```
 
 Cela exécutera les tests correspondants à partir des dossiers de tests spécifiés dans le fichier `tox.ini`. Assurez-vous de vérifier les résultats des tests et de résoudre tout problème avant de soumettre des contributions.
 
 N'hésitez pas à consulter le fichier `tox.ini` pour plus de détails sur la configuration des tests.
 
-## Utilisation
+### Organisation des tests
+Les tests sont organisés en trois catégories principales :
+
+-Tests unitaires : Ils vérifient le bon fonctionnement des différentes unités de code, telles que les fonctions, les méthodes ou les classes. Les fichiers de test correspondants se trouvent dans le répertoire tests/tests_unitaires et ont des noms se terminant par tests.py.
+
+-Tests statiques : Ils vérifient la conformité du code aux normes de style et aux bonnes pratiques. Ces tests sont utiles pour assurer la lisibilité et la maintenabilité du code. Les fichiers de test correspondants se trouvent dans le répertoire tests/_tests_static et ont des noms se terminant par _tests.py.
+
+-Tests d'isolation : Ils vérifient l'isolation des fonctionnalités et des dépendances. Ces tests sont importants pour s'assurer qu'une unité de code fonctionne correctement de manière indépendante sans interférence avec d'autres parties du système. Les fichiers de test correspondants se trouvent dans le répertoire tests/tests_isolation et ont des noms se terminant par _tests.py.
+
+## Diagrammes de Classe
+
+Ce projet utilise des diagrammes de classe pour visualiser la structure et les relations des classes. Vous pouvez trouver les fichiers HTML correspondants dans le dossier "diagramme de class". Voici une description de chaque diagramme de classe :
+
+### diagramme_manager.html : 
+Un diagramme de classe représentant la classe Manager et la classe SpotifyAPI. Il montre les attributs, les méthodes et les relations entre les classes.
+
+### diagramme_pdf.html : 
+Un diagramme de classe représentant la classe PDFGenerator et la classe WikipediaScraper. Il montre les attributs, les méthodes et les relations entre les classes.
+
+### diagramme_QR.html : 
+Un diagramme de classe représentant la classe QRCodeGenerator et la classe WikipediaScraper. Il montre les attributs, les méthodes et les relations entre les classes.
+
+### diagramme_single.html : 
+Un diagramme de classe représentant la classe Single et la classe Manager. Il montre les attributs et les méthodes de chaque classe.
 
 
 
@@ -94,7 +166,9 @@ N'hésitez pas à consulter le fichier `tox.ini` pour plus de détails sur la co
 Goua Beedi Henri
 
 ## Licence
+Ce projet est sous licence MIT License. Veuillez consulter le fichier LICENSE pour plus de détails.
 
+La licence MIT est une licence open source permissive qui permet à quiconque d'utiliser, de modifier, de distribuer et de vendre votre logiciel, à condition que le copyright et l'avis de licence soient inclus dans toutes les copies du logiciel. Elle offre une flexibilité et une liberté considérables pour les utilisateurs et les contributeurs du projet.
 
 
 ## Contact
@@ -107,4 +181,4 @@ Résumé des points forts de votre projet.
 
 ## Code source
 
-Lien vers le dépôt de code source du projet.
+[Lien vers le dépôt de code source du projet.](https://github.com/PESCADORRRRRRR/Projet-_nformatique_2A/tree/main)

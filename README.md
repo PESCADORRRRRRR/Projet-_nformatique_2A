@@ -151,16 +151,16 @@ Les tests sont organisés en trois catégories principales :
 
 Ce projet utilise des diagrammes de classe pour visualiser la structure et les relations des classes. Vous pouvez trouver les fichiers HTML correspondants dans le dossier "diagramme de class". Voici une description de chaque diagramme de classe :
 
-*** diagramme_manager.html : ***
+- ###### diagramme_manager.html : 
 Un diagramme de classe représentant la classe Manager et la classe SpotifyAPI. Il montre les attributs, les méthodes et les relations entre les classes.
 
-*** diagramme_pdf.html : ***
+- ###### diagramme_pdf.html : 
 Un diagramme de classe représentant la classe PDFGenerator et la classe WikipediaScraper. Il montre les attributs, les méthodes et les relations entre les classes.
 
-*** diagramme_QR.html : ***
+- ###### diagramme_QR.html : 
 Un diagramme de classe représentant la classe QRCodeGenerator et la classe WikipediaScraper. Il montre les attributs, les méthodes et les relations entre les classes.
 
-*** diagramme_single.html : ***
+- ###### diagramme_single.html : 
 Un diagramme de classe représentant la classe Single et la classe Manager. Il montre les attributs et les méthodes de chaque classe.
 
 
@@ -183,7 +183,7 @@ Ce projet permet aux joueurs de tester leurs connaissances musicales en retrouva
 
 En suivant les étapes d'implémentation décrites dans ce projet, vous serez en mesure de générer vos propres cartes pour le jeu de société Hitster. Assurez-vous de respecter les conditions d'utilisation des API et des sources de données pour une utilisation légale et éthique.
 
-N'hésitez pas à personnaliser ce projet en ajoutant de nouvelles fonctionnalités ou en adaptant le code selon vos besoins et vos préférences. Amusez-vous bien et profitez du jeu de société quizz musical Hitster !
+N'hésitez pas à personnaliser ce projet en ajoutant de nouvelles fonctionnalités ou en adaptant le code selon vos besoins et vos préférences. Amusez-vous bien et profitez du jeu de société quizz musical !
 
 ## Code source
 

@@ -131,21 +131,3 @@ class Single:
             return liste_info
 
 
-from single import Single
-
-
-# Chargement des variables d'environnement
-client_id = os.getenv("SPOTIFY_CLIENT_ID")
-client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-
-# Création du gestionnaire avec les informations d'identification
-manager = Manager(client_id, client_secret)
-
-# Création d'une instance de la classe Single
-single = Single("Coup du marteau", "Tam sir", "Date du single")
-
-# Affichage des informations du single
-# single.afficher_informations()
-
-# Jouez l'extrait audio du single
-single.jouer_extrait_audio()

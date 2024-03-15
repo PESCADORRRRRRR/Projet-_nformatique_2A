@@ -17,6 +17,7 @@ class QRCodeGenerator:
         :param url: L'URL à partir de laquelle les informations seront extraites.
         """
         self.url = url
+        self.is_completed = False
         try:
             self.scraper = WikipediaScraper(url)
         except Exception as e:
@@ -34,17 +35,12 @@ class QRCodeGenerator:
 
             # Génération des codes QR
             self.scraper.generate_qr_codes(nom_dossier_sortie_qr_code)
-
+            self.is_completed = True
+            
         except Exception as e:
             raise Exception("Erreur lors de la génération des codes QR :", e)
+    
+    def is_generation_completed(self):
+        return self.is_completed
 
 
-# URL de la page à extraire
-url = "https://fr.wikipedia.org/wiki/Liste_des_singles_num%C3%A9ro_un_en_France"
-
-# Création de l'objet QRCodeGenerator
-qr_generator = QRCodeGenerator(url)
-
-# Génération des codes QR
-nom_dossier_sortie_qr_code = "image_qr_code"
-qr_generator.generate_qr_code(nom_dossier_sortie_qr_code)

@@ -30,9 +30,9 @@ vant d'exécuter le code, vous devez vous assurer d'avoir les éléments suivant
 
 ## Utilisation
 
-1. Exécutez le script main.py pour générer les fichiers PDF des cartes.
+1. Exécutez le script main.py pour générer les codes QR et les fichiers PDF. Tant que la génération des codes QR n'est pas terminée, la génération des fichiers PDF des cartes ne commencera pas.
 
-2. Les fichiers PDF seront enregistrés dans le répertoire output/.
+2. Les fichiers PDF seront enregistrés dans le dossier  dossiers_de_sorties/.
 
 3. Vous pouvez maintenant imprimer les fichiers PDF et les utiliser dans le jeu de société Hitster.
 
@@ -40,14 +40,18 @@ vant d'exécuter le code, vous devez vous assurer d'avoir les éléments suivant
 
 Trois options d'installation sont disponibles :
 
-1. **Installation avec Docker (recommandé) :**
+1. ## Installation avec Docker (recommandé)
 
-   - Installer Docker.
-   - Construire l'image Docker :
-     - Ouvrez un terminal et accédez au répertoire du projet.
-     - Exécutez la commande suivante : `docker build -t my-app ..`.
-   - Exécuter le conteneur Docker :
-     - Exécutez la commande suivante : `docker run -it my-app`.
+- Assurez-vous d'avoir Docker installé sur votre machine. 
+
+[Lien pour cloner le dépôt.](https://github.com/PESCADORRRRRRR/Projet-_nformatique_2A/tree/main)
+
+- Installer Docker.
+- Construire l'image Docker :
+   - Ouvrez un terminal et accédez au répertoire du projet.
+   - Exécutez la commande suivante : docker build -t my-app ...
+- Exécuter le conteneur Docker :
+    - Exécutez la commande suivante : docker run -it my-app.
 
 2. **Installation manuelle :**
 
@@ -77,8 +81,10 @@ pylint scraping.py
 pylint manager.py
 pylint single.py
 pylint QR_code.py
-code_pdf.py
-jeu.py
+pylint code_pdf.py
+pylint jeu.py
+pylint main.py
+
 
 ## Dépendances
 
@@ -147,16 +153,16 @@ Les tests sont organisés en trois catégories principales :
 
 Ce projet utilise des diagrammes de classe pour visualiser la structure et les relations des classes. Vous pouvez trouver les fichiers HTML correspondants dans le dossier "diagramme de class". Voici une description de chaque diagramme de classe :
 
-### diagramme_manager.html : 
+*** diagramme_manager.html : ***
 Un diagramme de classe représentant la classe Manager et la classe SpotifyAPI. Il montre les attributs, les méthodes et les relations entre les classes.
 
-### diagramme_pdf.html : 
+*** diagramme_pdf.html : ***
 Un diagramme de classe représentant la classe PDFGenerator et la classe WikipediaScraper. Il montre les attributs, les méthodes et les relations entre les classes.
 
-### diagramme_QR.html : 
+*** diagramme_QR.html : ***
 Un diagramme de classe représentant la classe QRCodeGenerator et la classe WikipediaScraper. Il montre les attributs, les méthodes et les relations entre les classes.
 
-### diagramme_single.html : 
+*** diagramme_single.html : ***
 Un diagramme de classe représentant la classe Single et la classe Manager. Il montre les attributs et les méthodes de chaque classe.
 
 
@@ -177,7 +183,13 @@ La licence MIT est une licence open source permissive qui permet à quiconque d'
 
 ## Conclusion
 
-Résumé des points forts de votre projet.
+La génération de cartes pour un jeu de société quizz musical basé sur le concept de Hitster offre une expérience divertissante aux joueurs. En utilisant des API telles que Spotify (ou Deezer) et en extrayant les informations de la liste des singles numéro un en France depuis Wikipedia, nous pouvons créer un jeu personnalisé avec une variété de titres musicaux.
+
+Ce projet permet aux joueurs de tester leurs connaissances musicales en retrouvant le titre, l'artiste et l'année de différents titres populaires. Les cartes générées, avec les QR codes vers les extraits audio, offrent une interaction ludique et immersive.
+
+En suivant les étapes d'implémentation décrites dans ce projet, vous serez en mesure de générer vos propres cartes pour le jeu de société Hitster. Assurez-vous de respecter les conditions d'utilisation des API et des sources de données pour une utilisation légale et éthique.
+
+N'hésitez pas à personnaliser ce projet en ajoutant de nouvelles fonctionnalités ou en adaptant le code selon vos besoins et vos préférences. Amusez-vous bien et profitez du jeu de société quizz musical Hitster !
 
 ## Code source
 

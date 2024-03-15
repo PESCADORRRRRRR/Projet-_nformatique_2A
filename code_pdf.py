@@ -51,15 +51,4 @@ class PDFGenerator:
             raise Exception("Erreur lors de la génération des PDF :", e)   
         
 
-# URL de la page à extraire
-url = "https://fr.wikipedia.org/wiki/Liste_des_singles_num%C3%A9ro_un_en_France"
 
-# Création de l'objet QRCodeGenerator
-PDFgenerator = PDFGenerator(url)
-
-# Génération des codes QR
-nom_dossier_sortie_pdf = "PDF"
-nom_dossier_qr_codes = "image_qr_code"
-dimension_qr_code = 400
-
-PDFgenerator.generate_PDF(nom_dossier_qr_codes, nom_dossier_sortie_pdf,dimension_qr_code)

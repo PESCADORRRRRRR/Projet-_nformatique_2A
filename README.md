@@ -177,13 +177,9 @@ Ce projet est sous licence MIT License. Veuillez consulter le fichier LICENSE po
 La licence MIT est une licence open source permissive qui permet à quiconque d'utiliser, de modifier, de distribuer et de vendre votre logiciel, à condition que le copyright et l'avis de licence soient inclus dans toutes les copies du logiciel. Elle offre une flexibilité et une liberté considérables pour les utilisateurs et les contributeurs du projet.
 
 
-## Contact
-
-
-
 ## Conclusion
 
-La génération de cartes pour un jeu de société quizz musical basé sur le concept de Hitster offre une expérience divertissante aux joueurs. En utilisant des API telles que Spotify (ou Deezer) et en extrayant les informations de la liste des singles numéro un en France depuis Wikipedia, nous pouvons créer un jeu personnalisé avec une variété de titres musicaux.
+La génération de cartes pour un jeu de société quizz musical basé sur le concept de Hitster offre une expérience divertissante aux joueurs. En utilisant des API telles que Spotify  et en extrayant les informations de la liste des singles numéro un en France depuis Wikipedia, nous pouvons créer un jeu personnalisé avec une variété de titres musicaux.
 
 Ce projet permet aux joueurs de tester leurs connaissances musicales en retrouvant le titre, l'artiste et l'année de différents titres populaires. Les cartes générées, avec les QR codes vers les extraits audio, offrent une interaction ludique et immersive.
 
